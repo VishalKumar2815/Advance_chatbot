@@ -1,0 +1,6 @@
+services:
+  - type: web
+    name: your-app-name
+    env: static
+    buildCommand: echo "Static site"
+    staticPublishPath: .
