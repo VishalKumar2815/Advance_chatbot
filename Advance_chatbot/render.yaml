@@ -3,4 +3,4 @@ services:
     name: Advance_chatbot
     env: python
     buildCommand: pip install -r requirements.txt
-    startCommand: gunicorn Main:app --bind 0.0.0.0:$PORT
+    startCommand: gunicorn Main:app --bind 0.0.0.0:$PORT --timemout 120
