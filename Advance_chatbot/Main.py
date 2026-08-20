@@ -19,9 +19,7 @@ from markupsafe import Markup, escape
 
 app=Flask(__name__)
 upload_folder=os.path.join(os.getcwd(), "uploads")
-doc_loader=DOC_LOADER()
-embedder=Embedder()
-vectordb=VectorDB()
+
 
 # Exposes GET /download/<token>, serving DB-stored blobs (storage.py) —
 # no folder to scan, no path to keep in sync.
@@ -110,6 +108,10 @@ def logout():
 
 @app.route("/chatbot",methods=["POST","GET"])
 def Chatbot():
+
+    doc_loader=DOC_LOADER()
+    embedder=Embedder()
+    vectordb=VectorDB()
     # persist chat history in session across requests
     if "chats" not in session:
         first_id = str(uuid.uuid4())[:8]
