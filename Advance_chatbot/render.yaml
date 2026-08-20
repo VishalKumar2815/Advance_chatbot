@@ -1,6 +1,6 @@
 services:
   - type: web
-    name: your-app-name
-    env: static
-    buildCommand: echo "Static site"
-    staticPublishPath: .
+    name: Advance_chatbot
+    env: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn Main:app --bind 0.0.0.0:$PORT
