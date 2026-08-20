@@ -1,49 +1,27 @@
-from sentence_transformers import SentenceTransformer
-from Doc_loader import DOC_LOADER
+from fastembed import TextEmbedding
 from typing import List
 import numpy as np
 
 
-
 class Embedder:
-    def __init__(self,model_name:str="all-MiniLM-L6-v2"):
-        self.model=None
-        self.model_name=model_name
-        self.embeddings=None
-        self._intitalise_model()
+    def __init__(self, model_name: str = "BAAI/bge-small-en-v1.5"):
+        self.model_name = model_name
+        self.model = None
+        self._load_model()
 
-    
-    def _intitalise_model(self):
-        self.model=SentenceTransformer(self.model_name,backend="onnx")
-        if self.model:
+    def _load_model(self):
+        try:
+            self.model = TextEmbedding(model_name=self.model_name)
             print("Embedding model loaded ✅")
-        else:
-            print("Failed to load Embedding model ❌")
-    
+        except Exception as E:
+            print(E)
 
-    def Embed_docs(self,chunks:List[str])->np.ndarray:
-        docs=[doc.page_content for doc in chunks]
+    def embed_text(self, text: List[str]) -> np.ndarray:
         try:
-            self.embeddings=self.model.encode(docs,show_progress_bar=True)
-            if self.embeddings is not None:
-                print("embeddings generated successfuly ✅")
-            return self.embeddings
-        except Exception as e:
-            print(e)
-    
-    def Embed_query(self,chunks:List[str])->np.ndarray:
-        try:
-            self.embeddings=self.model.encode(chunks,show_progress_bar=True)
-            return self.embeddings
-        except Exception as e:
-            print(e)
-
-
-
-# loader=DOC_LOADER()
-# embedder=Embedder()
-# chunks=loader.load_documents(r"C:\Users\HP\OneDrive\Desktop\10-Practice-SQL-Final-Query-Questions.pdf")
-# embeded_text=embedder.Embed_docs(chunks)
-
-# print(embeded_text)
-
+            embeddings = list(self.model.embed(text))   # generator ko consume + list bana rahe hain
+            embeddings = np.array(embeddings)             # numpy array mein convert, downstream compatibility ke liye
+            print("Successfuly generated embeddings✅✅✅")
+            return embeddings
+        except Exception as E:
+            print("Failed to load embeddings!❌")
+            print(E)
