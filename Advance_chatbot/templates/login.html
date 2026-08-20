@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Login — Custom AI Assistant</title>
+<style>
+  :root {
+    --bg: #0d0f12; --surface: #1a1e26; --border: #252a35;
+    --accent: #4f8ef7; --text: #d4daea; --muted: #5a6478;
+    --error: #e05c5c; --success: #4caf82;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: var(--bg); color: var(--text);
+    font-family: 'Segoe UI', system-ui, sans-serif; font-size: 14px;
+    min-height: 100vh; display: flex; align-items: center; justify-content: center;
+    background-image:
+      linear-gradient(var(--border) 1px, transparent 1px),
+      linear-gradient(90deg, var(--border) 1px, transparent 1px);
+    background-size: 40px 40px;
+  }
+  .card {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 16px; padding: 40px 36px; width: 100%; max-width: 400px;
+    box-shadow: 0 24px 60px rgba(0,0,0,0.5); position: relative;
+  }
+  .card::before {
+    content: ''; position: absolute; top: -1px; left: 20%; right: 20%; height: 2px;
+    background: linear-gradient(90deg, transparent, var(--accent), transparent);
+  }
+  .brand { display: flex; align-items: center; gap: 10px; margin-bottom: 28px; }
+  .brand-dot {
+    width: 30px; height: 30px; background: var(--accent); border-radius: 8px;
+    display: flex; align-items: center; justify-content: center; font-size: 15px;
+  }
+  .brand-name { font-size: 16px; font-weight: 700; color: #fff; }
+  .prompt { font-family: monospace; font-size: 11px; color: var(--muted); margin-bottom: 20px; opacity: .6; }
+  .prompt span { color: var(--accent); }
+  h1 { font-size: 22px; font-weight: 700; color: #fff; margin-bottom: 5px; }
+  .sub { font-size: 13px; color: var(--muted); margin-bottom: 28px; }
+  /* flash */
+  .flashes { list-style: none; margin-bottom: 18px; }
+  .flashes li {
+    padding: 10px 14px; border-radius: 8px; font-size: 13px; margin-bottom: 6px;
+    border: 1px solid var(--error); background: rgba(224,92,92,.1); color: var(--error);
+  }
+  /* fields */
+  .field { margin-bottom: 18px; }
+  .field label {
+    display: block; font-size: 11px; font-weight: 700; letter-spacing: .7px;
+    text-transform: uppercase; color: var(--muted); margin-bottom: 7px;
+  }
+  .field input {
+    width: 100%; background: var(--bg); border: 1px solid var(--border);
+    border-radius: 9px; padding: 11px 14px; color: var(--text);
+    font-size: 14px; outline: none; transition: border-color .15s, box-shadow .15s;
+  }
+  .field input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(79,142,247,.12); }
+  .field input::placeholder { color: var(--muted); }
+  .field-error { color: var(--error); font-size: 12px; margin-top: 5px; }
+  /* submit */
+  .btn {
+    width: 100%; padding: 12px; background: var(--accent); color: #fff;
+    border: none; border-radius: 9px; font-size: 14px; font-weight: 600;
+    cursor: pointer; margin-top: 4px; transition: background .15s, transform .1s;
+  }
+  .btn:hover { background: #3a7ae8; }
+  .btn:active { transform: scale(.98); }
+  .divider {
+    display: flex; align-items: center; gap: 12px;
+    margin: 22px 0; color: var(--muted); font-size: 12px;
+  }
+  .divider::before, .divider::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+  .switch { text-align: center; font-size: 13px; color: var(--muted); }
+  .switch a { color: var(--accent); font-weight: 600; text-decoration: none; }
+  .switch a:hover { text-decoration: underline; }
+</style>
+</head>
+<body>
+<div class="card">
+  <div class="brand">
+    <div class="brand-dot">🤖</div>
+    <span class="brand-name">Custom AI Assistant</span>
+  </div>
+  <p class="prompt"><span>$</span> auth --mode login</p>
+  <h1>Welcome back</h1>
+  <p class="sub">Sign in to your workspace</p>
+
+  {% with messages = get_flashed_messages() %}
+    {% if messages %}
+      <ul class="flashes">
+        {% for msg in messages %}<li>{{ msg }}</li>{% endfor %}
+      </ul>
+    {% endif %}
+  {% endwith %}
+
+  <form method="POST" action="/login">
+    {{ form.hidden_tag() }}
+    <div class="field">
+      {{ form.Email.label }}
+      {{ form.Email(placeholder="you@example.com", autofocus=True) }}
+      {% for e in form.Email.errors %}<div class="field-error">{{ e }}</div>{% endfor %}
+    </div>
+    <div class="field">
+      {{ form.Password.label }}
+      {{ form.Password(placeholder="••••••••") }}
+      {% for e in form.Password.errors %}<div class="field-error">{{ e }}</div>{% endfor %}
+    </div>
+    {{ form.submit(class="btn") }}
+  </form>
+
+  <div class="divider">or</div>
+  <div class="switch">No account? <a href="/signup">Sign up free</a></div>
+</div>
+</body>
+</html>

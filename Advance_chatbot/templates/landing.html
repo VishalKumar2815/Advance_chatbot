@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<title>{% block title %}Custom AI Assistant{% endblock %}</title>
+
+<style>
+
+body{
+font-family:Arial;
+background:#f4f4f4;
+padding:40px;
+}
+
+.chat-box{
+background:white;
+padding:20px;
+border-radius:10px;
+width:600px;
+margin:auto;
+box-shadow:0 4px 10px rgba(0,0,0,0.2);
+}
+
+.login-box{
+background:white;
+padding:20px;
+border-radius:10px;
+width:600px;
+margin:auto;
+box-shadow:0 4px 10px rgba(0,0,0,0.2);
+}
+
+input{
+width:80%;
+padding:10px;
+}
+
+button{
+padding:10px;
+background:black;
+color:white;
+border:none;
+cursor:pointer;
+}
+
+.answer{
+margin-top:20px;
+background:#eee;
+padding:15px;
+border-radius:10px;
+}
+.navbar{
+margin-top:20px;
+background:#eee;
+padding:20px;
+border-radius:10px;
+box-shadow:0 4px 10px rgba(0,0,0,0.2);
+display: flex;
+  justify-content: flex-end; /* Moves div to the right */
+  align-items: flex-end; 
+  color: white;              /* White text */
+  border: none;              /* Remove default border */
+  padding: 10px 10px;        /* Add padding */
+  cursor: pointer;    /* Moves div to the bottom */
+}
+.logo{
+  background:#eeeeee;
+  box-shadow:0 4px 10px rgba(86, 116, 171, 0.2);
+}
+
+
+</style>
+
+</head>
+
+<body>
+  <div class="logo">Custom AI Assistant 🤖</div>
+    <div class="navbar">
+        <div class="menu">
+          <a href="/signup"><button> Signup</button></a>
+          <a href="/login"><button> Login</button></a>
+        </div>
+      </div>
+
+    
+      <div class="chat-box">
+          {% block content %}
+            <h1>Custom AI Assistant 🤖</h1>
+            <p>AI Chatbot </p>
+            <a href="/signup"><button>Get Started</button></a>
+          {% endblock %}
+
+      </div>
+
+    
+</body>
+</html>
