@@ -18,6 +18,7 @@ from pathlib import Path
 import os
 import asyncio
 from langchain_mcp_adapters.client import MultiServerMCPClient
+import sys 
 
 # Path to the doc-conversion server's entrypoint script.
 # IMPORTANT: set this to wherever your server.py actually lives.
@@ -30,7 +31,7 @@ SERVER_SCRIPT = os.path.join(os.path.dirname(os.path.abspath(__file__)),"server.
 async def get_client():
     client = MultiServerMCPClient({
         "doc_conversion": {
-            "command": r"D:\Cursor files\.venv\Scripts\python.exe",
+            "command": sys.executable,
             "args": [SERVER_SCRIPT],
             "transport": "stdio",
             # Critical: server.py does `from tools import ...` / `from utils import ...`.
