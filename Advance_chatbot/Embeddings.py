@@ -14,7 +14,7 @@ class Embedder:
 
     
     def _intitalise_model(self):
-        self.model=SentenceTransformer(self.model_name)
+        self.model=SentenceTransformer(self.model_name,backend="onnx")
         if self.model:
             print("Embedding model loaded ✅")
         else:
