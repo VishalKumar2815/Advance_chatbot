@@ -111,6 +111,3 @@ class DOC_LOADER:
         return chunks
 
 
-doc_loader=DOC_LOADER()
-chunks=doc_loader.load_documents(r"C:\Users\HP\OneDrive\Desktop\logo.webp")
-print(chunks)
