@@ -24,3 +24,4 @@ langchain-mcp-adapters
 gunicorn
 fastembed
 email_validator
+flask-wtf
