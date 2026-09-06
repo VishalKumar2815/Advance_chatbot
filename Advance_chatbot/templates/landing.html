@@ -1,97 +1,125 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>{% block title %}Custom AI Assistant{% endblock %}</title>
 
 <style>
+  :root {
+    --bg: #0d0f12; --surface: #1a1e26; --border: #252a35;
+    --accent: #4f8ef7; --accent-dim: #2a4a8a;
+    --text: #d4daea; --muted: #8891a3;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
 
-body{
-font-family:Arial;
-background:#f4f4f4;
-padding:40px;
-}
+  body {
+    font-family: 'Segoe UI', system-ui, Arial, sans-serif;
+    background: var(--bg); color: var(--text);
+    min-height: 100vh;
+    display: flex; flex-direction: column;
+  }
 
-.chat-box{
-background:white;
-padding:20px;
-border-radius:10px;
-width:600px;
-margin:auto;
-box-shadow:0 4px 10px rgba(0,0,0,0.2);
-}
+  /* ── navbar ── */
+  .navbar {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 16px 32px;
+    background: var(--surface); border-bottom: 1px solid var(--border);
+  }
+  .logo {
+    display: flex; align-items: center; gap: 10px;
+    font-size: 17px; font-weight: 700; color: #fff;
+  }
+  .logo-dot {
+    width: 30px; height: 30px; background: var(--accent); border-radius: 8px;
+    display: flex; align-items: center; justify-content: center; font-size: 15px;
+  }
+  .menu { display: flex; gap: 10px; }
+  .menu a { text-decoration: none; }
+  button, .btn {
+    padding: 9px 18px; border-radius: 8px; border: none;
+    font-size: 13.5px; font-weight: 600; cursor: pointer;
+    transition: background .15s, border-color .15s, color .15s, transform .1s;
+  }
+  button:active, .btn:active { transform: scale(.97); }
+  .btn-ghost {
+    background: transparent; color: var(--text);
+    border: 1px solid var(--border);
+  }
+  .btn-ghost:hover { border-color: var(--accent); color: var(--accent); }
+  .btn-solid {
+    background: var(--accent); color: #fff; border: 1px solid var(--accent);
+  }
+  .btn-solid:hover { background: #3a7ae8; }
 
-.login-box{
-background:white;
-padding:20px;
-border-radius:10px;
-width:600px;
-margin:auto;
-box-shadow:0 4px 10px rgba(0,0,0,0.2);
-}
+  /* ── hero / content area ── */
+  .content-wrap {
+    flex: 1; display: flex; align-items: center; justify-content: center;
+    padding: 40px 20px;
+  }
+  .chat-box {
+    background: var(--surface); border: 1px solid var(--border);
+    padding: 44px 40px; border-radius: 16px;
+    width: 100%; max-width: 560px;
+    text-align: center;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.35);
+  }
+  .chat-box h1 {
+    font-size: 30px; color: #fff; margin-bottom: 10px;
+    display: flex; align-items: center; justify-content: center; gap: 10px;
+  }
+  .chat-box p {
+    color: var(--muted); font-size: 15px; margin-bottom: 26px; line-height: 1.6;
+  }
 
-input{
-width:80%;
-padding:10px;
-}
+  /* ── generic form styling, in case login/signup extend this base ── */
+  input {
+    width: 100%; padding: 11px 14px; margin-bottom: 12px;
+    background: var(--bg); border: 1px solid var(--border); border-radius: 8px;
+    color: var(--text); font-size: 14px; outline: none;
+    transition: border-color .15s;
+  }
+  input:focus { border-color: var(--accent); }
+  input::placeholder { color: var(--muted); }
 
-button{
-padding:10px;
-background:black;
-color:white;
-border:none;
-cursor:pointer;
-}
+  .answer {
+    margin-top: 20px; background: var(--bg); border: 1px solid var(--border);
+    padding: 16px; border-radius: 10px; text-align: left;
+    font-family: 'Cascadia Code', 'Fira Code', monospace; font-size: 13px;
+    color: var(--text);
+  }
 
-.answer{
-margin-top:20px;
-background:#eee;
-padding:15px;
-border-radius:10px;
-}
-.navbar{
-margin-top:20px;
-background:#eee;
-padding:20px;
-border-radius:10px;
-box-shadow:0 4px 10px rgba(0,0,0,0.2);
-display: flex;
-  justify-content: flex-end; /* Moves div to the right */
-  align-items: flex-end; 
-  color: white;              /* White text */
-  border: none;              /* Remove default border */
-  padding: 10px 10px;        /* Add padding */
-  cursor: pointer;    /* Moves div to the bottom */
-}
-.logo{
-  background:#eeeeee;
-  box-shadow:0 4px 10px rgba(86, 116, 171, 0.2);
-}
-
-
+  footer {
+    text-align: center; padding: 16px; font-size: 12px; color: var(--muted);
+  }
 </style>
 
 </head>
 
 <body>
-  <div class="logo">Custom AI Assistant 🤖</div>
-    <div class="navbar">
-        <div class="menu">
-          <a href="/signup"><button> Signup</button></a>
-          <a href="/login"><button> Login</button></a>
-        </div>
-      </div>
 
-    
-      <div class="chat-box">
-          {% block content %}
-            <h1>Custom AI Assistant 🤖</h1>
-            <p>AI Chatbot </p>
-            <a href="/signup"><button>Get Started</button></a>
-          {% endblock %}
+  <div class="navbar">
+    <div class="logo">
+      <div class="logo-dot">🤖</div>
+      AI QUERYFORGE
+    </div>
+    <div class="menu">
+      <a href="/login"><button class="btn-ghost">Log in</button></a>
+      <a href="/signup"><button class="btn-solid">Sign up</button></a>
+    </div>
+  </div>
 
-      </div>
+  <div class="content-wrap">
+    <div class="chat-box">
+      {% block content %}
+        <h1>🤖 AI QUERYFORGE</h1>
+        <p>Chat, analyze data, extract from APIs, and get key insights — all in one place.</p>
+        <a href="/signup"><button class="btn-solid" style="padding:12px 28px; font-size:14.5px;">Get Started</button></a>
+      {% endblock %}
+    </div>
+  </div>
 
-    
+  <footer>© Custom AI Assistant</footer>
+
 </body>
 </html>
