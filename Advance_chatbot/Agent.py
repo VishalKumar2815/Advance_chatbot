@@ -4,7 +4,6 @@ from langchain_tavily import TavilySearch
 from Retriever import DOCRetriever
 import os
 from dotenv import load_dotenv
-from langchain_groq import ChatGroq
 from langchain_openai import ChatOpenAI
 from mcp_doc_server.Client import get_client
 import asyncio
@@ -13,7 +12,7 @@ from langchain_core.tools import StructuredTool
 
 load_dotenv()
 
-os.environ["GROQ_API_KEY"] = os.getenv("GROQ_API_KEY")
+
 os.environ["TAVILY_API_KEY"] = os.getenv("TAVILY_API_KEY")
 
 
