@@ -5,6 +5,7 @@ from Retriever import DOCRetriever
 import os
 from dotenv import load_dotenv
 from langchain_groq import ChatGroq
+from langchain_openai import ChatOpenai
 from mcp_doc_server.Client import get_client
 import asyncio
 from langchain_core.tools import StructuredTool
@@ -61,10 +62,7 @@ def _build_agent():
     lives here — runs ONLY on first actual use, not at worker boot / import time."""
     retriever = DOCRetriever()
 
-    model = ChatGroq(
-        model="qwen/qwen3.6-27b",
-        temperature=0,
-    )
+    model=ChatOpenAI(model_name="gpt-5.6-terra", temperature=0)
 
     websearch_tool = TavilySearch(max_results=5, topic="general")
 
