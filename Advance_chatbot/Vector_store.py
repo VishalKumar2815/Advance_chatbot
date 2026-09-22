@@ -52,8 +52,9 @@ class VectorDB:
             documents_list.append(docs.page_content)
             embeddings_list.append(embeddings.tolist())
         
-        try:
+        try: 
             self.collection.add(ids=id,embeddings=embeddings_list,metadatas=metadata,documents=documents_list)
+        
             print("Succesfully added document to vector store✅")
 
         except Exception as e:
