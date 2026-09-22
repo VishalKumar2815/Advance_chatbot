@@ -1,14 +1,14 @@
 from langchain.agents import create_agent
 from langchain.tools import tool
 from langchain_tavily import TavilySearch
-from Retriever import DOCRetriever
+# from Retriever import DOCRetriever
 import os
 from dotenv import load_dotenv
 from langchain_openai import ChatOpenAI
 from mcp_doc_server.Client import get_client
 import asyncio
 from langchain_core.tools import StructuredTool
-
+from hybrid_search import HybridRetriever
 
 load_dotenv()
 
@@ -59,9 +59,15 @@ def _make_sync(async_tool):
 def _build_agent():
     """Everything heavy (MCP subprocess spawn, tool registration, agent build)
     lives here — runs ONLY on first actual use, not at worker boot / import time."""
-    retriever = DOCRetriever()
+    # retriever = DOCRetriever()
+    retriever= HybridRetriever()
 
-    model=ChatOpenAI(model_name="gpt-5.6-terra", temperature=0)
+    model = ChatOpenAI(
+    model_name="gpt-5.6-terra",
+    temperature=0,
+    use_responses_api=True,
+    reasoning_effort="medium",   # ya "low"/"high", jo bhi chahiye
+)
 
     websearch_tool = TavilySearch(max_results=5, topic="general")
 

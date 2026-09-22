@@ -25,3 +25,15 @@ class Embedder:
         except Exception as E:
             print("Failed to load embeddings!❌")
             print(E)
+
+    def embed_chunks(self,chunks):
+        try:
+            document_chunks = [doc.page_content for doc in chunks]
+            embeddings=list(self.model.embed(document_chunks))
+            embeddings=np.array(embeddings)
+            return embeddings
+        except Exception as E:
+            print("Failed to load embeddings!❌")
+            print(E)
+
+

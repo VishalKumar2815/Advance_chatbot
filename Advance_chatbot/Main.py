@@ -170,7 +170,7 @@ def Chatbot():
                 session.modified = True
 
                 chunks=doc_loader.load_documents(fr"{file_path}")
-                embeddings=embedder.Embed_docs(chunks)
+                embeddings=embedder.embed_text(chunks)
                 vectordb.store_data(chunks,embeddings)
 
                 
@@ -197,7 +197,7 @@ def Chatbot():
                 try:
                     #if not the webbase loader replace with seperate URL tool pipeline.
                     chunks = doc_loader.load_documents(user)  # pass URL directly
-                    embeddings = embedder.Embed_docs(chunks)
+                    embeddings = embedder.embed_text(chunks)
                     vectordb.store_data(chunks, embeddings)
 
                     data = doc_loader.documents

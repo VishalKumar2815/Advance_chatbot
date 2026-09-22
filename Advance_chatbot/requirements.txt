@@ -26,3 +26,5 @@ gunicorn
 fastembed
 email_validator
 flask-wtf
+rank_bm25
+fastembed

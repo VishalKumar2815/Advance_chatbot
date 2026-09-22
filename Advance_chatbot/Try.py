@@ -20,42 +20,39 @@ def Chatbot():
         user=input("User: ").strip('""')
         if user.lower() in ["tata","bye","stop","quit","exit"]:
             break
-            
+
         if user.endswith((".py",".pdf",".docx",".txt",".html",".json",".csv")):
             try:
-
                 chunks=doc_loader.load_documents(fr"{user}")
-                embeddings=embedder.Embed_docs(chunks)
-                vectordb.store_data(chunks,embeddings)
+                embeddings=embedder.embed_chunks(chunks)
+                vectordb.store_data(chunks,embeddings) 
 
-
-                data=[doc.page_content for doc in doc_loader.documents]
+                data="".join(doc.page_content for doc in doc_loader.documents)  # was list-slice bug
                 overview_request= (f"A document was just uploaded. Here is its full text:\n\n"
                                         f"{data[:6000]}\n\n"
                                         f"Give a brief overview of this document." )
-                history.append({"role": "user", "content": overview_request}) 
-                print(history) 
 
-                response=agent.invoke({"messages":history})
+                response=agent.invoke({"messages": history + [{"role": "user", "content": overview_request}]})
                 final_answer=response["messages"][-1].content
-                print("AI: ",final_answer)  
-            
+                print("AI: ",final_answer)
+
+                # keep history light — don't permanently store the full document dump
+                history.append({"role": "user", "content": f"[uploaded document: {user}]"})
+                history.append({"role": "assistant", "content": final_answer})
+
             except Exception as E:
-                raise ValueError(E)
-        
+                print(f"Error: {E}")
+
+            continue   # was missing — file path was falling through and being sent as a second question
+
         history.append({"role": "user", "content": user})
         try:
             response=agent.invoke({"messages":history})
             final_answer=response["messages"][-1].content
-            print("AI: ",final_answer)  
+            print("AI: ",final_answer)
+            history.append({"role": "assistant", "content": final_answer})
         except Exception as E:
-            raise ValueError(E)
+            print(f"Error: {E}")
 
 
 Chatbot()
-
-
-
-                
-
-

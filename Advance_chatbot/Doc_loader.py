@@ -101,8 +101,7 @@ class DOC_LOADER:
         if self.documents is not None:
             print("Documents Loaded successfuly  ✅")
             for doc in self.documents:
-                document=Path(self.doc_path)
-                doc.metadata["Source"]=document
+                doc.metadata["Source"]=str(self.doc_path)
                 doc.metadata["File Type"]=self.file_type
             
             chunks=self.Chunker(self.documents)
