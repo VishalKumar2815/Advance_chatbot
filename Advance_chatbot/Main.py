@@ -50,6 +50,13 @@ with app.app_context():
     db.create_all()
 
 
+def extract_text(content):
+    if isinstance(content, str):
+        return content
+    if isinstance(content, list):
+        return "".join(b.get("text","") for b in content if isinstance(b, dict) and b.get("type")=="text")
+    return str(content)
+
 
 @app.route("/",methods=["POST","GET"])
 def landing_page():
@@ -170,7 +177,7 @@ def Chatbot():
                 session.modified = True
 
                 chunks=doc_loader.load_documents(fr"{file_path}")
-                embeddings=embedder.embed_text(chunks)
+                embeddings=embedder.embed_chunks(chunks)
                 vectordb.store_data(chunks,embeddings)
 
                 
@@ -179,7 +186,7 @@ def Chatbot():
                                         f"Give a brief overview of this document." )
 
                 response=agent.invoke({"messages":[{"role":"user","content":overview_request}]})
-                final_answer=response["messages"][-1].content
+                final_answer = extract_text(response["messages"][-1].content)
                 print("AI: ",final_answer)
 
                 active_chat["messages"].append({"role": "user",      "content": f"📎 Uploaded: {file.filename}"})
@@ -197,7 +204,7 @@ def Chatbot():
                 try:
                     #if not the webbase loader replace with seperate URL tool pipeline.
                     chunks = doc_loader.load_documents(user)  # pass URL directly
-                    embeddings = embedder.embed_text(chunks)
+                    embeddings = embedder.embed_chunks(chunks)
                     vectordb.store_data(chunks, embeddings)
 
                     data = doc_loader.documents
@@ -207,7 +214,7 @@ def Chatbot():
                         f"Give a brief overview of this page."
                     )
                     response     = agent.invoke({"messages": [{"role": "user", "content": overview_request}]})
-                    final_answer = response["messages"][-1].content
+                    final_answer = extract_text(response["messages"][-1].content)
 
                     active_chat["messages"].append({"role": "user",     "content": f"🌐 Loaded: {user}"})
                     active_chat["messages"].append({"role": "assistant", "content": final_answer})
@@ -232,7 +239,7 @@ def Chatbot():
                         )
 
                     response=agent.invoke({"messages": history + [{"role": "user", "content": overview_request}]})
-                    final_answer=response["messages"][-1].content
+                    final_answer = extract_text(response["messages"][-1].content)
                     print("AI: ",final_answer)
 
                     # A conversion tool embeds "/download/<token>" in its
