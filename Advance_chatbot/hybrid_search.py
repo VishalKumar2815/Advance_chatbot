@@ -167,6 +167,3 @@ class HybridRetriever:
         return final[:top_k]
 
 
-retriever = HybridRetriever()
-for r in retriever.retrieve("hired in 2000"):
-    print(r.get("rerank_score"), r["dense_rank"], r["sparse_rank"], r["content"][:100])
