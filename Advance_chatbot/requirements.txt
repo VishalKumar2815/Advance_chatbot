@@ -27,3 +27,5 @@ email_validator
 flask-wtf
 rank_bm25
 fastembed
+youtube_transcript_api
+yt_dlp
