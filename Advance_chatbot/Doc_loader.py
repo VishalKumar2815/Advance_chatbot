@@ -2,6 +2,7 @@ from pathlib import Path
 from langchain_community.document_loaders import CSVLoader,PyPDFLoader,WebBaseLoader,TextLoader,UnstructuredWordDocumentLoader,JSONLoader
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 from langchain_core.documents import Document
+from youtube_loader import YoutubeLoader
 
 import os
 
@@ -72,6 +73,9 @@ class DOC_LOADER:
         elif self.doc_path.endswith((".py",".js")):
             self.file_type="CODE File"
             self.loader=TextLoader(self.doc_path)
+        elif "youtube.com" in self.doc_path or "youtu.be" in self.doc_path:
+            self.file_type = "YOUTUBE VIDEO"
+            self.loader = YoutubeLoader(url=self.doc_path)
         elif self.doc_path.startswith("http://") or self.doc_path.startswith("https://"):
             self.file_type="URL File"
             self.loader=WebBaseLoader(self.doc_path)
@@ -104,7 +108,11 @@ class DOC_LOADER:
                 doc.metadata["Source"]=str(self.doc_path)
                 doc.metadata["File Type"]=self.file_type
             
-            chunks=self.Chunker(self.documents)
+            if self.file_type=="YOUTUBE VIDEO":
+                chunks=self.documents
+                print("Youtube transcript already chunked , skipping document chunking ")
+            else:
+                chunks=self.Chunker(self.documents)
         else:
             raise ValueError("Failed to initialize documents  ❌")
         return chunks

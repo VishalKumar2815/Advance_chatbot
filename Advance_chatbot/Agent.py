@@ -26,9 +26,12 @@ def calc(expression: str) -> str:
 
 def _make_document_search_tool(retriever):
     @tool("document_search", description=(
-        "Search the currently uploaded document for information relevant to a query. "
-        "Use this whenever the user's question could be answered from an uploaded file. "
-        "If no document has been uploaded yet, this tool will say so."
+    "Search uploaded documents and loaded YouTube video transcripts for information "
+    "relevant to a query. Use this whenever the user's question could be answered "
+    "from an uploaded file (PDF, DOCX, CSV, etc.) or from a YouTube video that was "
+    "shared (a single video or a playlist). This also works for questions like "
+    "'what does the video say about X' or 'summarize the document'. "
+    "If nothing has been uploaded or loaded yet, this tool will say so."
     ))
     def document_search(query: str) -> str:
         results = retriever.retrieve(query)
@@ -87,6 +90,7 @@ def _build_agent():
 
             Rules:
             - Use document_search whenever the question could relate to an uploaded document.
+            - Use document_search whenever the question is related to youtube video.
             - Use calculator for arithmetic.
             - Use web_search for current information not in any document.
             - If document_search says no document is loaded, tell the user to upload one.
